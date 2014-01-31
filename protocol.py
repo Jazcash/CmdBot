@@ -1,5 +1,6 @@
 import socket
 import sys
+import string
 
 class Protocol:
 	def __init__(self, address, port):
@@ -7,7 +8,7 @@ class Protocol:
 		self.serverConnect(address, port)
 		
 	def serverConnect(self, server, port):
-		print "Connecting to: "+server
+		print "Connecting to: "+server+"...",
 		try: 
 			self.sock.connect((server, port))
 			print "Connected!"
@@ -18,10 +19,12 @@ class Protocol:
 	def send(self, text):
 		self.sock.send(text)
 		
-	def socketLoop(self, textRetreived):
+	def socketLoop(self, messageRetreived):
+		print "Listening to incoming messages..."
+		readbuffer = ""
 		while 1:
-			text = self.sock.recv(2040)
-			if (text.find("PING") != -1):
-				self.send("PONG " + text.split() [1] + "\r\n")
-				
-			textRetreived(text)
+			#readbuffer=readbuffer+self.sock.recv(510, socket.MSG_DONTWAIT & socket.MSG_PEEK) #Get non-blocking working
+			readbuffer=readbuffer+self.sock.recv(510)
+			temp=string.split(readbuffer, "\r\n")
+			readbuffer=temp.pop( )
+			messageRetreived(temp)
