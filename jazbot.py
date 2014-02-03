@@ -39,13 +39,12 @@ class Jazbot:
 		if ((cmd[0] == "PRIVMSG") & (cmd[len(cmd)-1][0] == "!")):
 			channel = cmd[1]
 			cmdArgs = cmd[2][1:].split(" ")
-			#self.cmdHandler.executeCmd(cmdArgs[0]) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
-			# execute function
-			#cmdHandler.hi(channel, nick, user, cmdArgs)
-			#self.ircConnection.send(ircFunctions.say("#ectest", "You sent a command!"))
+			#self.cmdHandler.executeCmd(cmdArgs[0], cmdArgs[) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
+	#trigger, channel, nick, user, cmd
 			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
+			print message
 			prefixEnd = -1	# prefix ends here
 			trailingStart = len(message) # trailing starts here
 			## Optional Variables - To make sure UnboundErrors don't occur ##
@@ -72,16 +71,16 @@ class Jazbot:
 			else:
 				trailingStart = len(message) # otherwise there is no trailing, but keep track of where it would begin anyway for later use
 			## Cmd + Cmd Params ##
-			cmdAndParams = message[prefixEnd + 1:trailingStart].split(" ") # cmd and its paramaters are anything between prefix and trailing
-			cmd = cmdAndParams[0] # cmd name/code itself is always the first item
-			if (len(cmdAndParams) > 1):
-					cmdparams = cmdAndParams[1:] # if cmd has paramaters, assign the parameters to their own variable
+			signalAndParams = message[prefixEnd + 1:trailingStart].split(" ") # cmd and its paramaters are anything between prefix and trailing
+			signal = signalAndParams[0] # cmd name/code itself is always the first item
+			if (len(signalAndParams) > 1):
+					signalParams = signalAndParams[1:] # if cmd has paramaters, assign the parameters to their own variable
 			if (trailing):
-					cmdAndParams.append(trailing) # if there is a trailing, append it to the cmd paramaters
+					signalAndParams.append(trailing) # if there is a trailing, append it to the cmd paramaters
 					
-			self.messageHandler(cmdAndParams, user, nick) # send the message on to be processed
+			self.messageHandler(signalAndParams, user, nick) # send the message on to be processed
 			
-			if(cmdAndParams[0]=="PING"):
-				self.ircConnection.send("PONG %s\r\n" % cmdAndParams[1]) # when server pings, send back pong to stay alive (PONG <server>)
+			if(signalAndParams[0]=="PING"):
+				self.ircConnection.send("PONG %s\r\n" % signalAndParams[1]) # when server pings, send back pong to stay alive (PONG <server>)
 				
 			#time.sleep(1) # debugging

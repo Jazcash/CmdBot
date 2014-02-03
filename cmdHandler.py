@@ -8,7 +8,7 @@ class CommandHandler():
 		if not (cmdTrigger): cmdTrigger = cmdFunction.__name__ # if no cmd trigger (e.g. !sayhi) is defined then use the function's name (!hi)
 		self.cmd[cmdTrigger] = cmdFunction
 		
-	def executeCmd(self, channel, nick, user, args):
+	def executeCmd(self, trigger, channel, nick, user, cmd):
 		self.cmd[trigger]()
 		
 	## Jazbot Default Commands ##

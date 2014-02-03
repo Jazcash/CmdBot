@@ -21,7 +21,7 @@ def sayHi(nick):        # Your function
 ```
 Then simply run your bot with: `$ python myBot.py`. That's all!
 
-Now when a user (let's say bob) types __!hi__ in the same channel as your bot, your bot will respond with __hello bob!__ Easy!
+Now when a user (let's say bob) types `!hi` in the same channel as your bot, your bot will respond with `hello bob!` Easy!
 
 ### Documentation
 #### Definitions
@@ -32,13 +32,25 @@ Sample IRC Message: `:JazcashRenamed!~Jazcash@public.cloak PRIVMSG #ectest :!hi 
 
 Here are my code definitions (variable names) for the various parts of this message:
 
-Socket Scope: `:<nick>!~<user>@<host> <signal> <signalArgs>`
+Level 1: <prefix> <signal>
+	prefix = `:JazcashRenamed!~Jazcash@public.cloak`
+	signal = `PRIVMSG #ectest :!hi Jim Fred`
+	
+Level 2: `:<nick>!~<user>@<host> <signalName> <signalArgs>`
+	nick = `JazcashRenamed`
+	user = `Jazcash`
+	host = `public.cloak`
+	signalName = `PRIVMSG`
+	signalArgs = `["#ectest", ":!hi Jim Fred"]`
+	
+Levels below this are specific to the `PRIVMSG` signal
+Level 3: `:<nick>!~<user>@<host> <signalName> <channel> :<text>`
+	text = `!hi Jim fred`
+	
+Levels below this are specific to chat commands
+Level 4: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmd>`
+	cmd = `["hi", "Jim", "Fred"]`
 
-The message is then parsed and because this is a PRIVMSG signal containing a command (`!hi`), the `Message Handler` sends these parts on to the `Command Handler` using the following names:
-
-* nick = `"JazcashRenamed"`
-* user = `"Jazcash"`
-* channel = `"#ectest"`
-* cmd = `["hi", "Jim", "Fred"]`
-
-The first item in `cmd` is known as `cmdTrigger` and the collective name for the other items is `cmdArgs`.
+Level 5: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmdTrigger> <cmdArgs>`
+	cmdTrigger = `hi`
+	cmdArgs = `["Jim", "Fred"]`
