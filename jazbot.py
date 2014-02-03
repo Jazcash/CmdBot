@@ -16,15 +16,14 @@ class Jazbot:
 		self.register(self.nick) # register self with nickserv
 		self.joinChannels(self.channels) # join channels
 		self.ircConnection.socketLoop(self.parseMessages) # begin lisening to incoming messages
-		
-	def say(self, where, msg):
-		self.ircConnection.send("PRIVMSG "+where+" :"+msg+"\r\n")
-		
 	def authenticate(self, nick):
 		self.ircConnection.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"!\r\n")
 		
 	def register(self, nick):
 		self.say("nickserv", nick)
+		
+	def say(self, where, msg):
+		self.ircConnection.send("PRIVMSG "+where+" :"+msg+"\r\n")
 		
 	def setNick(self, nick):
 		self.ircConnection.send("NICK "+nick+"\r\n")
@@ -33,17 +32,27 @@ class Jazbot:
 		for channel in channels:
 			self.ircConnection.send("JOIN :"+channel+"\r\n")
 			
-	def messageHandler(self, message): # sends messages off to their appropriate handlers
+	def messageHandler(self, cmd, user=None, nick=None): # sends messages off to their appropriate handlers
+		''' # unused for now
+			Message Parts
+					message["user"] # persistent for a session, is the user's nick at server join
+					message["nick"] # can change during a session (i.e. /nick newname)
+					message["cmd"] # first argument is the cmd name/code, others are parameters - msg text itself is /usually/ the last argument
+		'''
+		
+		''' # example
 		if (message["cmd"][0] == "PRIVMSG"):
 			## MOVE BELOW PART TO PRIVMSG HANDLER ##
-			if (message["cmd"][2].find("ACTION") > 0):
+			if (message["cmd"][2].find("ACTION") > 0): # if message is an action (/me)
 				print message["cmd"][2].replace("ACTION", message["nick"], 1)
-			else:
+			else: # if message isn't an action
 				print message["nick"] + " said " + message["cmd"][len(message["cmd"])-1],
-				if (message["cmd"][1] == self.nick):
+				if (message["cmd"][1] == self.nick): # if message was sent to me (Jazbot)
 					print "to me"
-				else:
+				else: # if message was sent in a channel
 					print "in "+message["cmd"][1]
+					'''
+		print message
 	
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
@@ -79,16 +88,18 @@ class Jazbot:
 					cmdparams = cmdAndParams[1:] # if cmd has paramaters, assign the parameters to their own variable
 			if (trailing):
 					cmdAndParams.append(trailing) # if there is a trailing, append it to the cmd paramaters
-
+					
+			''' Unused because it's easier/better to just pass the data as separate parameters instead
 			## Create a handy message dictionary from the metadata ##
 			message = {"cmd":cmdAndParams}
-			if (prefix): message["prefix"] = prefix
+			if (prefix): message["prefix"] = prefix # not really used for anything as user and nick are passed on separately
 			if (user): message["user"] = user
 			if (nick): message["nick"] = nick
+			'''
 			
-			self.messageHandler(message) # send the message on to be processed
-			
-			#time.sleep(1) # debugging
+			self.messageHandler(cmd, user, nick) # send the message on to be processed
 			
 			if(cmdAndParams[0]=="PING"):
 				self.ircConnection.send("PONG %s\r\n" % cmdAndParams[1]) # when server pings, send back pong to stay alive (PONG <server>)
+				
+			#time.sleep(1) # debugging

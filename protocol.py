@@ -24,7 +24,7 @@ class Protocol:
 		readbuffer = ""
 		while 1:
 			#readbuffer=readbuffer+self.sock.recv(510, socket.MSG_DONTWAIT & socket.MSG_PEEK) #Get non-blocking working
-			readbuffer=readbuffer+self.sock.recv(510)
+			readbuffer=readbuffer+self.sock.recv(510) # 510 bytes = max length of IRC message
 			temp=string.split(readbuffer, "\r\n")
 			readbuffer=temp.pop( )
 			messageRetreived(temp)
