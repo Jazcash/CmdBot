@@ -32,26 +32,8 @@ class Jazbot:
 		for channel in channels:
 			self.ircConnection.send("JOIN :"+channel+"\r\n")
 			
-	def messageHandler(self, cmd, user=None, nick=None): # sends messages off to their appropriate handlers
-		''' # unused for now
-			Message Parts
-					message["user"] # persistent for a session, is the user's nick at server join
-					message["nick"] # can change during a session (i.e. /nick newname)
-					message["cmd"] # first argument is the cmd name/code, others are parameters - msg text itself is /usually/ the last argument
-		'''
+	def messageHandler(self, cmd, user, nick): # sends messages off to their appropriate handlers
 		
-		''' # example
-		if (message["cmd"][0] == "PRIVMSG"):
-			## MOVE BELOW PART TO PRIVMSG HANDLER ##
-			if (message["cmd"][2].find("ACTION") > 0): # if message is an action (/me)
-				print message["cmd"][2].replace("ACTION", message["nick"], 1)
-			else: # if message isn't an action
-				print message["nick"] + " said " + message["cmd"][len(message["cmd"])-1],
-				if (message["cmd"][1] == self.nick): # if message was sent to me (Jazbot)
-					print "to me"
-				else: # if message was sent in a channel
-					print "in "+message["cmd"][1]
-					'''
 		print message
 	
 	def parseMessages(self, messages):
@@ -89,14 +71,6 @@ class Jazbot:
 			if (trailing):
 					cmdAndParams.append(trailing) # if there is a trailing, append it to the cmd paramaters
 					
-			''' Unused because it's easier/better to just pass the data as separate parameters instead
-			## Create a handy message dictionary from the metadata ##
-			message = {"cmd":cmdAndParams}
-			if (prefix): message["prefix"] = prefix # not really used for anything as user and nick are passed on separately
-			if (user): message["user"] = user
-			if (nick): message["nick"] = nick
-			'''
-			
 			self.messageHandler(cmd, user, nick) # send the message on to be processed
 			
 			if(cmdAndParams[0]=="PING"):
