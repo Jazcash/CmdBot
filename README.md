@@ -33,24 +33,28 @@ Sample IRC Message: `:JazcashRenamed!~Jazcash@public.cloak PRIVMSG #ectest :!hi 
 Here are my code definitions (variable names) for the various parts of this message:
 
 Level 1: <prefix> <signal>
-	prefix = `:JazcashRenamed!~Jazcash@public.cloak`
-	signal = `PRIVMSG #ectest :!hi Jim Fred`
+
+	* prefix = `:JazcashRenamed!~Jazcash@public.cloak`
+	* signal = `PRIVMSG #ectest :!hi Jim Fred`
 	
 Level 2: `:<nick>!~<user>@<host> <signalName> <signalArgs>`
-	nick = `JazcashRenamed`
-	user = `Jazcash`
-	host = `public.cloak`
-	signalName = `PRIVMSG`
-	signalArgs = `["#ectest", ":!hi Jim Fred"]`
+
+	* nick = `JazcashRenamed`
+	* user = `Jazcash`
+	* host = `public.cloak`
+	* signalName = `PRIVMSG`
+	* signalArgs = `["#ectest", ":!hi Jim Fred"]`
 	
 Levels below this are specific to the `PRIVMSG` signal
+
 Level 3: `:<nick>!~<user>@<host> <signalName> <channel> :<text>`
-	text = `!hi Jim fred`
+	* text = `!hi Jim fred`
 	
 Levels below this are specific to chat commands
+
 Level 4: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmd>`
-	cmd = `["hi", "Jim", "Fred"]`
+	* cmd = `["hi", "Jim", "Fred"]`
 
 Level 5: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmdTrigger> <cmdArgs>`
-	cmdTrigger = `hi`
-	cmdArgs = `["Jim", "Fred"]`
+	* cmdTrigger = `hi`
+	* cmdArgs = `["Jim", "Fred"]`
