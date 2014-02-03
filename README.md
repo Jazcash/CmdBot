@@ -53,8 +53,10 @@ Level 3: `:<nick>!~<user>@<host> <signalName> <channel> :<text>`
 Levels below this are specific to chat commands
 
 Level 4: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmd>`
+
 	* cmd = `["hi", "Jim", "Fred"]`
 
 Level 5: `:<nick>!~<user>@<host> <signalName> <channel> :!<cmdTrigger> <cmdArgs>`
+
 	* cmdTrigger = `hi`
 	* cmdArgs = `["Jim", "Fred"]`
