@@ -8,6 +8,7 @@ class Jazbot:
 		self.nick = nick
 		self.channels = channels
 		#Setup bot
+		self.cmdHandler = cmdHandler.CommandHandler()
 		self.setupAndStart(address, port)
 
 	def setupAndStart(self, address, port):
@@ -17,6 +18,7 @@ class Jazbot:
 		self.register(self.nick) # register self with nickserv
 		self.joinChannels(self.channels) # join channels
 		self.ircConnection.socketLoop(self.parseMessages) # begin lisening to incoming messages
+		
 	def authenticate(self, nick):
 		self.ircConnection.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"!\r\n")
 		
@@ -37,6 +39,7 @@ class Jazbot:
 		if ((cmd[0] == "PRIVMSG") & (cmd[len(cmd)-1][0] == "!")):
 			channel = cmd[1]
 			cmdArgs = cmd[2][1:].split(" ")
+			#self.cmdHandler.executeCmd(cmdArgs[0]) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
 			# execute function
 			#cmdHandler.hi(channel, nick, user, cmdArgs)
 			#self.ircConnection.send(ircFunctions.say("#ectest", "You sent a command!"))
