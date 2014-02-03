@@ -1,5 +1,6 @@
 import protocol
 import time
+import cmdHandler
 
 class Jazbot:
 	def __init__(self, address, port, nick, channels):
@@ -32,10 +33,14 @@ class Jazbot:
 		for channel in channels:
 			self.ircConnection.send("JOIN :"+channel+"\r\n")
 			
-	def messageHandler(self, cmd, user, nick): # sends messages off to their appropriate handlers
-		
-		print message
-	
+	def messageHandler(self, cmd, user, nick): # sends messages off to their appropriate handlers based on conditions
+		if ((cmd[0] == "PRIVMSG") & (cmd[len(cmd)-1][0] == "!")):
+			channel = cmd[1]
+			cmdArgs = cmd[2][1:].split(" ")
+			# execute function
+			#cmdHandler.hi(channel, nick, user, cmdArgs)
+			#self.ircConnection.send(ircFunctions.say("#ectest", "You sent a command!"))
+			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
 			prefixEnd = -1	# prefix ends here
@@ -71,7 +76,7 @@ class Jazbot:
 			if (trailing):
 					cmdAndParams.append(trailing) # if there is a trailing, append it to the cmd paramaters
 					
-			self.messageHandler(cmd, user, nick) # send the message on to be processed
+			self.messageHandler(cmdAndParams, user, nick) # send the message on to be processed
 			
 			if(cmdAndParams[0]=="PING"):
 				self.ircConnection.send("PONG %s\r\n" % cmdAndParams[1]) # when server pings, send back pong to stay alive (PONG <server>)

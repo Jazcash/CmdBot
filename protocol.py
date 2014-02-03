@@ -15,7 +15,7 @@ class Protocol:
 		except Exception, e:
 			print "ERROR: "+e.args[1]
 			sys.exit()
-			
+	
 	def send(self, text):
 		self.sock.send(text)
 		
