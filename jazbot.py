@@ -1,30 +1,26 @@
-import protocol
 import time
 import cmdHandler
 
 class Jazbot:
-	def __init__(self, address, port, nick, channels):
-		#Attributes
-		self.nick = nick
-		self.channels = channels
-		#Setup bot
-		self.cmdHandler = cmdHandler.CommandHandler(address, port, nick, channels)
-		self.setupAndStart(address, port)
+	def __init__(self, address, port, botNick, botChannels):
+		self.botNick = botNick
+		self.botChannels = botChannels
 
-	def setupAndStart(self, address, port):
-		self.cmdHandler(address, port) # connect to IRC server
-		self.ircConnection.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"!\r\n") # authenticate session
-		self.ircConnection.send("NICK "+nick+"\r\n")  # set bot nick
-		self.say("nickserv", nick) # register self with nickserv
-		for channel in channels:
-			self.ircConnection.send("JOIN :"+channel+"\r\n") # join channels
-		self.ircConnection.socketLoop(self.parseMessages) # begin lisening to incoming messages
+		self.cmdHandler = cmdHandler.CommandHandler(address, port, botNick, botChannels)
+		self.setupAndStart()
+
+	def setupAndStart(self):
+		self.cmdHandler.authenticate(self.botNick) # authenticate session
+		self.cmdHandler.setNick(self.botNick)  # set bot nick
+		self.cmdHandler.say("nickserv", self.botNick) # register self with nickserv
+		self.cmdHandler.joinChannels(self.botChannels)
+		self.cmdHandler.socketLoop(self.parseMessages) # begin lisening to incoming messages
 			
-	def messageHandler(self, cmd, user, nick): # sends messages off to their appropriate handlers based on conditions
+	def messageHandler(self, cmd, userNick, userName): # sends messages off to their appropriate handlers based on conditions
 		if ((cmd[0] == "PRIVMSG") & (cmd[len(cmd)-1][0] == "!")):
 			channel = cmd[1]
 			cmdArgs = cmd[2][1:].split(" ")
-			self.cmdHandler.executeCmd(cmdArgs[0], channel, nick, user, cmd) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
+			self.cmdHandler.executeCmd(cmdArgs[0], channel, userNick, userName, cmd) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
 			#trigger, channel, nick, user, cmd
 			
 	def parseMessages(self, messages):
