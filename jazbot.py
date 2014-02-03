@@ -8,39 +8,24 @@ class Jazbot:
 		self.nick = nick
 		self.channels = channels
 		#Setup bot
-		self.cmdHandler = cmdHandler.CommandHandler()
+		self.cmdHandler = cmdHandler.CommandHandler(address, port, nick, channels)
 		self.setupAndStart(address, port)
 
 	def setupAndStart(self, address, port):
-		self.ircConnection = protocol.Protocol(address, port) # connect to IRC server
-		self.authenticate(self.nick) # authenticate session
-		self.setNick(self.nick) # set bot nick
-		self.register(self.nick) # register self with nickserv
-		self.joinChannels(self.channels) # join channels
-		self.ircConnection.socketLoop(self.parseMessages) # begin lisening to incoming messages
-		
-	def authenticate(self, nick):
-		self.ircConnection.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"!\r\n")
-		
-	def register(self, nick):
-		self.say("nickserv", nick)
-		
-	def say(self, where, msg):
-		self.ircConnection.send("PRIVMSG "+where+" :"+msg+"\r\n")
-		
-	def setNick(self, nick):
-		self.ircConnection.send("NICK "+nick+"\r\n")
-		
-	def joinChannels(self, channels):
+		self.cmdHandler(address, port) # connect to IRC server
+		self.ircConnection.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"!\r\n") # authenticate session
+		self.ircConnection.send("NICK "+nick+"\r\n")  # set bot nick
+		self.say("nickserv", nick) # register self with nickserv
 		for channel in channels:
-			self.ircConnection.send("JOIN :"+channel+"\r\n")
+			self.ircConnection.send("JOIN :"+channel+"\r\n") # join channels
+		self.ircConnection.socketLoop(self.parseMessages) # begin lisening to incoming messages
 			
 	def messageHandler(self, cmd, user, nick): # sends messages off to their appropriate handlers based on conditions
 		if ((cmd[0] == "PRIVMSG") & (cmd[len(cmd)-1][0] == "!")):
 			channel = cmd[1]
 			cmdArgs = cmd[2][1:].split(" ")
-			#self.cmdHandler.executeCmd(cmdArgs[0], cmdArgs[) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
-	#trigger, channel, nick, user, cmd
+			self.cmdHandler.executeCmd(cmdArgs[0], channel, nick, user, cmd) # pass the cmd trigger (e.g. sayhi) to the cmd handler to be executed
+			#trigger, channel, nick, user, cmd
 			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
