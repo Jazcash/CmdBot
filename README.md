@@ -32,7 +32,7 @@ Sample IRC Message: `:JazcashRenamed!~Jazcash@public.cloak PRIVMSG #ectest :!hi 
 
 Here are my code definitions (variable names) for the various parts of this message:
 
-Level 1: <prefix> <signal>
+Level 1: `<prefix> <signal>`
 
 	* prefix = `:JazcashRenamed!~Jazcash@public.cloak`
 	* signal = `PRIVMSG #ectest :!hi Jim Fred`
