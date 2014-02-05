@@ -3,21 +3,25 @@ import sys
 import string
 
 class Protocol:
-	def __init__(self, address, port):
+	def __init__(self):
 		self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.serverConnect(address, port)
-		
-	def serverConnect(self, server, port):
-		print "Connecting to: "+server+"...",
-		try: 
-			self.sock.connect((server, port))
-			print "Connected!"
-		except Exception, e:
-			print "ERROR: "+e.args[1]
-			sys.exit()
+	
+	def serverConnect(self, serverAddress, serverPort):
+		print "Connecting to: "+serverAddress+"...",
+		#try: 
+		self.sock.connect((serverAddress, serverPort))
+		print "Connected!"
+		#except Exception, e:
+			#print "ERROR "+str(e.args[0])+": "+str(e.args[1])
+			#sys.exit()
 	
 	def send(self, text):
+		#try:
+		print text
 		self.sock.send(text)
+		#except Exception, e:
+			#print "ERROR "+str(e.args[0])+": "+str(e.args[1])
+			#sys.exit()
 		
 	def socketLoop(self, messageRetreived):
 		print "Listening to incoming messages..."
@@ -28,3 +32,4 @@ class Protocol:
 			temp=string.split(readbuffer, "\r\n")
 			readbuffer=temp.pop( )
 			messageRetreived(temp)
+			print "after msg"
