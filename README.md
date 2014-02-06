@@ -8,20 +8,19 @@ Jazbot is an IRC bot API that allows users to easily add their own commands with
 * Python 2.7
 
 ### Usage
-```python
+```
 ## myBot.py ##
+import cmdbot
 
-import jazbot
+mybot = cmdbot.CmdBot("irc.w3.org", 6667, "Jazbot", ["#chan1"])
 
-mybot = jazbot.Jazbot("irc.w3.org", 6667, "Jazbot", ["#chan1"])
-
-@mybot.addcmd("!hi")    # Trigger
-def sayHi(nick):        # Your function
-    print "Hello " + user + "!"
+## commands.py ##
+def hi():
+	_say(channel, "Hello %s!" % (nick))
 ```
 Then simply run your bot with: `$ python myBot.py`. That's all!
 
-Now when a user (let's say bob) types `!hi` in the same channel as your bot, your bot will respond with `hello bob!` Easy!
+Now when a user (let's say bob) types `!hi` in the same channel as your bot, your bot will respond with `Hello bob!` Easy!
 
 ### Documentation
 #### Definitions
