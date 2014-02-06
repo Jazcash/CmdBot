@@ -13,7 +13,6 @@ class Jazbot:
 		self.cmdHandler = commandHandler.CommandHandler(self.irc)
 		self.msgHandler = messageHandler.MessageHandler(self.cmdHandler)
 		
-		#self.cmdHandler.serverConnect(self.botAddress, botPort)
 		self.setupAndStart()
 
 	def setupAndStart(self):
@@ -23,3 +22,13 @@ class Jazbot:
 		self.cmdHandler.say("nickserv", self.botNick) # register self with nickserv
 		self.cmdHandler.joinChannels(self.botChannels) # join channels
 		self.cmdHandler.socketLoop(self.msgHandler.parseMessages) # begin lisening to incoming messages
+		
+	def addCmd(self, trigger):
+		def wrap(func):
+			print "First"
+			func()
+			print "Second"
+			
+		def sayFuncAdded(func):
+			pass
+		return sayFuncAdded

@@ -13,10 +13,9 @@ class MessageHandler:
 				cmd = signal[2][1:].split(" ") # cmd[0] = cmdName, rest = cmdArgs
 				
 				self.cmdHandler.execute(cmd, channel, userNick, userName)
-				
-		if(signal[0]=="PING"):
+		elif(signal[0] == "PING"):
 			self.cmdHandler.pong() # when server pings, send back pong to stay alive (PONG <server>)
-
+			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
 			print message # print all pre-parsed messages to console - debugging

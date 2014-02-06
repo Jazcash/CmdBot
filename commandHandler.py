@@ -1,27 +1,48 @@
 import protocol
 import string
+import sys
+import os
+import threading
+import commands
+import inspect
 
 class CommandHandler:
 	def __init__(self, irc):
 		self.irc = irc
-		self.cmds = {"hi":self.hi, "bye":self.bye, "quit":self.quit}
+		self.cmds = self.setupCmds()
 		
 	## SOCKET LOOP ##
 	def socketLoop(self, func):
+		#self.socketLoop = threading.Thread(target=self.irc.socketLoop, args=(func,))
+		#self.socketLoop.daemon = False  # False = make socketLoop continue even after the userfile finishes
+		#self.socketLoop.start()
 		self.irc.socketLoop(func)
-
+		
 	def serverConnect(self, serverAddress, serverPort):
 		self.irc.serverConnect(serverAddress, serverPort)
 		
-	def addCmd(self, cmdFunction, cmdTrigger):
-		if not (cmdTrigger): cmdTrigger = cmdFunction.__name__ # if no cmd trigger (e.g. !sayhi) is defined then use the function's name (!hi)
-		self.cmd[cmdTrigger] = cmdFunction
+	def setupCmds(self):
+		commands.say = self.say
+		commands._quit = self._quit
+		
+		cmdDict = {}
+		tmpCommands = inspect.getmembers(commands, inspect.isfunction)
+		print tmpCommands
+		for cmd in tmpCommands:
+			cmdDict[cmd[0]] = cmd[1]
+			print cmd[0]
+		return cmdDict
 		
 	def execute(self, cmd, channel, userNick, userName):
+		commands.user = userName
+		commands.nick = userNick
+		commands.channel = channel
+		commands.args = cmd[1:]
+		
 		cmdName = cmd[0]
-		cmdArgs = cmd[1:]
-		if cmdName in self.cmds:
-			self.cmds[cmdName](cmdName, cmdArgs, channel, userNick, userName)
+		
+		if (cmdName in self.cmds):
+			self.cmds[cmdName]()
 		
 	## Jazbot Default Commands ##
 	def authenticate(self, nick):
@@ -42,15 +63,8 @@ class CommandHandler:
 	def joinChannels(self, channels):
 		for channel in channels:
 			self.irc.send("JOIN :"+channel+" \r\n")
-	
-	## User Chat Commands ##
-	
-	def hi(self, cmdName, cmdArgs, channel, userNick, userName):
-		self.say(channel, "Hello "+userNick+"!")
-		
-	def bye(self, cmdName, cmdArgs, channel, userNick, userName):
-		self.say(channel, "Goodbye "+userNick+"!")
-
-	def quit(self, cmdName, cmdArgs, channel, userNick, userName):
-		print "%s (%s) called !quit. Shutting down..." % (userNick, userName)
+			
+	def _quit(self, userNick="Somebody"):
+		print "Quitting"
 		self.irc.send("QUIT :"+"%s called !quit" % (userNick)+" \r\n")
+		sys.exit(1)

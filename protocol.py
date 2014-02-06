@@ -1,5 +1,4 @@
 import socket
-import sys
 import string
 
 class Protocol:
