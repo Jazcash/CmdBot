@@ -8,7 +8,7 @@ Jazbot is an IRC bot API that allows users to easily add their own commands with
 * Python 2.7
 
 ### Usage
-```
+```python
 ## myBot.py ##
 import cmdbot
 
