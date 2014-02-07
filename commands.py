@@ -15,3 +15,6 @@ def join():
 	
 def part():
 	IRCpart()
+	
+def quit():
+	IRCquit()

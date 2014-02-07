@@ -5,6 +5,7 @@ import os
 import threading
 import commands
 import inspect
+import time
 
 class CommandHandler:
 	def __init__(self, irc):
@@ -26,13 +27,12 @@ class CommandHandler:
 		commands.IRCquit = self.IRCquit
 		commands.IRCjoin = self.IRCjoin
 		commands.IRCpart = self.IRCpart
+		commands.IRCwait10 = self.IRCwait10
 		
 		cmdDict = {}
 		tmpCommands = inspect.getmembers(commands, inspect.isfunction)
-		print tmpCommands
 		for cmd in tmpCommands:
 			cmdDict[cmd[0]] = cmd[1]
-			print cmd[0]
 		return cmdDict
 		
 	def execute(self, cmd, channel, userNick, userName):
@@ -70,6 +70,6 @@ class CommandHandler:
 		self.irc.send("PART :"+commands.channel+" \r\n")
 			
 	def IRCquit(self):
-		print "Quitting"
+		print "Quitting - %s called !quit" % (commands.nick)
 		self.irc.send("QUIT :"+"%s called !quit" % (commands.nick)+" \r\n")
 		sys.exit(1)
