@@ -8,12 +8,13 @@ class MessageHandler:
 		self.cmdHandler = commandHandler.CommandHandler(self.ircFunctions)
 	
 	def routeMessage(self, signal, userNick, userName):
-		if (len(signal) == 3):
-			if ((signal[0] == "PRIVMSG") & (signal[2][0] == "!")): # if user types a command
-				channel = signal[1]
-				cmd = signal[2][1:].split(" ") # cmd[0] = cmdName, rest = cmdArgs
-				
+		if ((len(signal) == 3) & (signal[0] == "PRIVMSG")): # if user types a command
+			channel = signal[1]
+			cmd = signal[2][1:].split(" ") # cmd[0] = cmdName, rest = cmdArgs
+			if (signal[2][0] == "!"):
 				self.cmdHandler.execute(cmd, channel, userNick, userName)
+			else:
+				self.ircFunctions.say(channel, signal[2])
 		elif(signal[0] == "PING"):
 			self.ircFunctions.pong() # when server pings, send back pong to stay alive (PONG <server>)
 			
