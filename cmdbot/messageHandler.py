@@ -14,7 +14,8 @@ class MessageHandler:
 			if (signal[2][0] == "!"):
 				self.cmdHandler.execute(cmd, channel, userNick, userName)
 			else:
-				self.ircFunctions.say(channel, signal[2])
+				if (userName == "Dan"):
+					self.ircFunctions.say(channel, signal[2])
 		elif(signal[0] == "PING"):
 			self.ircFunctions.pong() # when server pings, send back pong to stay alive (PONG <server>)
 			
