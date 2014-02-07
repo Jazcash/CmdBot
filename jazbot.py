@@ -20,7 +20,7 @@ class Jazbot:
 		self.cmdHandler.authenticate(self.botNick) # authenticate session
 		self.cmdHandler.setNick(self.botNick)  # set bot nick
 		self.cmdHandler.say("nickserv", self.botNick) # register self with nickserv
-		self.cmdHandler.joinChannels(self.botChannels) # join channels
+		self.cmdHandler.join(self.botChannels) # join channels
 		self.cmdHandler.socketLoop(self.msgHandler.parseMessages) # begin lisening to incoming messages
 		
 	def addCmd(self, trigger):

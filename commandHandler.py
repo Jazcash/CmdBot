@@ -23,7 +23,8 @@ class CommandHandler:
 		
 	def setupCmds(self):
 		commands.say = self.say
-		commands._quit = self._quit
+		commands.quit = self.quit
+		commands.join = self.join
 		
 		cmdDict = {}
 		tmpCommands = inspect.getmembers(commands, inspect.isfunction)
@@ -60,11 +61,11 @@ class CommandHandler:
 	def setNick(self, nick):
 		self.irc.send("NICK "+nick+" \r\n")
 		
-	def joinChannels(self, channels):
+	def join(self, channels):
 		for channel in channels:
 			self.irc.send("JOIN :"+channel+" \r\n")
 			
-	def _quit(self, userNick="Somebody"):
+	def quit(self):
 		print "Quitting"
-		self.irc.send("QUIT :"+"%s called !quit" % (userNick)+" \r\n")
+		self.irc.send("QUIT :"+"%s called !quit" % (commands.nick)+" \r\n")
 		sys.exit(1)
