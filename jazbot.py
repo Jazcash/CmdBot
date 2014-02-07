@@ -1,24 +1,25 @@
-import commandHandler
 import messageHandler
-import protocol
+import socketHandler
+import ircFunctions
 
 class Jazbot:
-	def __init__(self, botAddress, botPort, botNick, botChannels):
+	def __init__(self, botAddress="irc.w3.org", botPort=6667, botNick="Jazbot", botChannels=["#ectest"]):
 		self.botAddress = botAddress
 		self.botPort = botPort
 		self.botNick = botNick
 		self.botChannels = botChannels
 
-		self.irc = protocol.Protocol()
-		self.cmdHandler = commandHandler.CommandHandler(self.irc)
-		self.msgHandler = messageHandler.MessageHandler(self.cmdHandler)
+		self.irc = socketHandler.SocketHandler(self.botAddress, self.botPort)
+		self.ircFunctions = ircFunctions.IrcFunctions(self.irc)
+		#self.cmdHandler = commandHandler.CommandHandler(self.ircFunctions)
 		
-		self.setupAndStart()
-
-	def setupAndStart(self):
-		self.irc.serverConnect(self.botAddress, self.botPort)
-		self.cmdHandler.IRCauthenticate(self.botNick) # authenticate session
-		self.cmdHandler.IRCsetNick(self.botNick)  # set bot nick
-		self.cmdHandler.IRCsay("nickserv", self.botNick) # register self with nickserv
-		self.cmdHandler.IRCjoin(self.botChannels) # join channels
-		self.cmdHandler.socketLoop(self.msgHandler.parseMessages) # begin lisening to incoming messages
+		self.msgHandler = messageHandler.MessageHandler(self.ircFunctions)
+		
+		self.ircFunctions.authenticate(self.botNick) # authenticate session
+		self.ircFunctions.setNick(self.botNick)  # set bot nick
+		self.ircFunctions.say("nickserv", self.botNick) # register self with nickserv
+		self.ircFunctions.join(self.botChannels) # join channels
+		self.irc.listen(self.msgHandler.parseMessages) # begin lisening to incoming messages
+		
+if (__name__ == "__main__"):
+	Jazbot()

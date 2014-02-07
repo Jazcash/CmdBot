@@ -3,8 +3,9 @@
 import commandHandler
 
 class MessageHandler:
-	def __init__(self, cmdHandler):
-		self.cmdHandler = cmdHandler
+	def __init__(self, ircFunctions):
+		self.ircFunctions = ircFunctions
+		self.cmdHandler = commandHandler.CommandHandler(self.ircFunctions)
 	
 	def routeMessage(self, signal, userNick, userName):
 		if (len(signal) == 3):
@@ -14,7 +15,7 @@ class MessageHandler:
 				
 				self.cmdHandler.execute(cmd, channel, userNick, userName)
 		elif(signal[0] == "PING"):
-			self.cmdHandler.pong() # when server pings, send back pong to stay alive (PONG <server>)
+			self.ircFunctions.pong() # when server pings, send back pong to stay alive (PONG <server>)
 			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
