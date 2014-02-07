@@ -17,18 +17,8 @@ class Jazbot:
 
 	def setupAndStart(self):
 		self.irc.serverConnect(self.botAddress, self.botPort)
-		self.cmdHandler.authenticate(self.botNick) # authenticate session
-		self.cmdHandler.setNick(self.botNick)  # set bot nick
-		self.cmdHandler.say("nickserv", self.botNick) # register self with nickserv
-		self.cmdHandler.join(self.botChannels) # join channels
+		self.cmdHandler.IRCauthenticate(self.botNick) # authenticate session
+		self.cmdHandler.IRCsetNick(self.botNick)  # set bot nick
+		self.cmdHandler.IRCsay("nickserv", self.botNick) # register self with nickserv
+		self.cmdHandler.IRCjoin(self.botChannels) # join channels
 		self.cmdHandler.socketLoop(self.msgHandler.parseMessages) # begin lisening to incoming messages
-		
-	def addCmd(self, trigger):
-		def wrap(func):
-			print "First"
-			func()
-			print "Second"
-			
-		def sayFuncAdded(func):
-			pass
-		return sayFuncAdded

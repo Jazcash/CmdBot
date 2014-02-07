@@ -22,9 +22,10 @@ class CommandHandler:
 		self.irc.serverConnect(serverAddress, serverPort)
 		
 	def setupCmds(self):
-		commands.say = self.say
-		commands.quit = self.quit
-		commands.join = self.join
+		commands.IRCsay = self.IRCsay
+		commands.IRCquit = self.IRCquit
+		commands.IRCjoin = self.IRCjoin
+		commands.IRCpart = self.IRCpart
 		
 		cmdDict = {}
 		tmpCommands = inspect.getmembers(commands, inspect.isfunction)
@@ -46,26 +47,29 @@ class CommandHandler:
 			self.cmds[cmdName]()
 		
 	## Jazbot Default Commands ##
-	def authenticate(self, nick):
+	def IRCauthenticate(self, nick):
 		self.irc.send("USER "+nick+" "+nick+" "+nick+" "+" :I'm "+nick+"! \r\n")
 		
-	def register(self, nick):
+	def IRCregister(self, nick):
 		self.say("nickserv", nick)
 	
-	def pong(self):
+	def IRCpong(self):
 		self.irc.send("PONG")
 		
-	def say(self, where, msg):
+	def IRCsay(self, where, msg):
 		self.irc.send("PRIVMSG "+where+" :"+msg+" \r\n")
 		
-	def setNick(self, nick):
+	def IRCsetNick(self, nick):
 		self.irc.send("NICK "+nick+" \r\n")
 		
-	def join(self, channels):
+	def IRCjoin(self, channels):
 		for channel in channels:
 			self.irc.send("JOIN :"+channel+" \r\n")
 			
-	def quit(self):
+	def IRCpart(self):
+		self.irc.send("PART :"+commands.channel+" \r\n")
+			
+	def IRCquit(self):
 		print "Quitting"
 		self.irc.send("QUIT :"+"%s called !quit" % (commands.nick)+" \r\n")
 		sys.exit(1)
