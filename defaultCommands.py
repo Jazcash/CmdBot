@@ -1,17 +1,14 @@
 ############# Available Variables #############		|		################ Available Functions #################
-# user = username of person who typed command			|		# IRCsay(channel, msg) = bot prints message in channel
-# nick = nickname of person who typed command			|		# IRCjoin(channels) = bot joins given channels
-# channel = location that command was typed in		|		# IRCquit() = bot disconnects from IRC server
-# args = arguments give to command								|		# IRCpart(channels) = bot leaves given channels
-
-def _say():
- 	say()
+# user = username of person who typed command			|		# ircSay(channel, msg) = bot prints message in channel
+# nick = nickname of person who typed command			|		# ircJoin(channels) = bot joins given channels
+# channel = location that command was typed in		|		# ircQuit(nick) = bot disconnects from IRC server
+# args = arguments give to command								|		# ircPart(channel) = bot leaves given channel
 
 def _join():
-	join(args)
+	ircJoin(args)
 	
-def _part():
-	part()
+def _leave():
+	ircPart(channel)
 	
-def _quit():
-	quit()
+def _shutdown():
+	ircQuit(nick)

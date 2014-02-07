@@ -1,3 +1,5 @@
+import sys
+
 class IrcFunctions:
 	def __init__(self, irc):
 		self.irc = irc
@@ -21,10 +23,10 @@ class IrcFunctions:
 		for channel in channels:
 			self.irc.send("JOIN :"+channel+" \r\n")
 			
-	def part(self):
-		self.irc.send("PART :"+commands.channel+" \r\n")
+	def part(self, channel):
+		self.irc.send("PART :"+channel+" \r\n")
 			
-	def quit(self):
-		print "Quitting - %s called !quit" % (commands.nick)
-		self.irc.send("QUIT :"+"%s called !quit" % (commands.nick)+" \r\n")
+	def quit(self, nick):
+		print("Quitting - %s called !quit" % (nick))
+		self.irc.send("QUIT :"+"%s called !quit" % (nick)+" \r\n")
 		sys.exit(1)

@@ -17,10 +17,14 @@ class CommandHandler:
 		self.setupCmds()
 		
 	def setupCmds(self):
-		commands._say = self.ircFunctions.say
-		commands._quit = self.ircFunctions.quit
-		commands._join = self.ircFunctions.join
-		commands._part = self.ircFunctions.part
+		commands.ircSay = self.ircFunctions.say
+		commands.ircQuit = self.ircFunctions.quit
+		commands.ircJoin = self.ircFunctions.join
+		commands.ircPart = self.ircFunctions.part
+		
+		defaultCommands.ircQuit = self.ircFunctions.quit
+		defaultCommands.ircJoin = self.ircFunctions.join
+		defaultCommands.ircPart = self.ircFunctions.part
 		
 		tmpCommands = inspect.getmembers(commands, inspect.isfunction) + inspect.getmembers(defaultCommands, inspect.isfunction)
 		for cmd in tmpCommands:
@@ -37,9 +41,12 @@ class CommandHandler:
 		commands.channel = channel
 		commands.args = cmd[1:]
 		
+		defaultCommands.user = userName
+		defaultCommands.nick = userNick
+		defaultCommands.channel = channel
+		defaultCommands.args = cmd[1:]
+		
 		cmdName = cmd[0]
 		
-		print cmdName
-		print self.cmds
 		if (cmdName in self.cmds):
 			self.cmds[cmdName]()

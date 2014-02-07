@@ -19,7 +19,7 @@ class MessageHandler:
 			
 	def parseMessages(self, messages):
 		for message in messages: # for every message in the received socket text, process its metadata
-			print message # print all pre-parsed messages to console - debugging
+			print(message) # print all pre-parsed messages to console - debugging
 			prefixEnd = -1	# prefix ends here
 			trailingStart = len(message) # trailing starts here
 			## Optional Variables - To make sure UnboundErrors don't occur ##
