@@ -4,7 +4,7 @@ import os
 import threading
 import inspect
 import time
-import myCommands from commands
+import commands.myCommands
 import ircFunctions
 import defaultCommands
 
@@ -17,16 +17,16 @@ class CommandHandler:
 		self.setupCmds()
 		
 	def setupCmds(self):
-		commands.ircSay = self.ircFunctions.say
-		commands.ircQuit = self.ircFunctions.quit
-		commands.ircJoin = self.ircFunctions.join
-		commands.ircPart = self.ircFunctions.part
+		commands.myCommands.ircSay = self.ircFunctions.say
+		commands.myCommands.ircQuit = self.ircFunctions.quit
+		commands.myCommands.ircJoin = self.ircFunctions.join
+		commands.myCommands.ircPart = self.ircFunctions.part
 		
 		defaultCommands.ircQuit = self.ircFunctions.quit
 		defaultCommands.ircJoin = self.ircFunctions.join
 		defaultCommands.ircPart = self.ircFunctions.part
 		
-		tmpCommands = inspect.getmembers(commands, inspect.isfunction) + inspect.getmembers(defaultCommands, inspect.isfunction)
+		tmpCommands = inspect.getmembers(commands.myCommands, inspect.isfunction) + inspect.getmembers(defaultCommands, inspect.isfunction)
 		for cmd in tmpCommands:
 			if (cmd[0][0] == "_"):
 				self.cmds[cmd[0][1:]] = cmd[1]
@@ -36,10 +36,10 @@ class CommandHandler:
 			self.funcs[cmd[0]] = cmd[1]
 		
 	def execute(self, cmd, channel, userNick, userName):
-		commands.user = userName
-		commands.nick = userNick
-		commands.channel = channel
-		commands.args = cmd[1:]
+		commands.myCommands.user = userName
+		commands.myCommands.nick = userNick
+		commands.myCommands.channel = channel
+		commands.myCommands.args = cmd[1:]
 		
 		defaultCommands.user = userName
 		defaultCommands.nick = userNick
