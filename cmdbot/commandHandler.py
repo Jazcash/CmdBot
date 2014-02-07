@@ -4,7 +4,7 @@ import os
 import threading
 import inspect
 import time
-import commands
+import myCommands from commands
 import ircFunctions
 import defaultCommands
 
