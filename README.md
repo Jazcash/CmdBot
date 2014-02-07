@@ -44,7 +44,7 @@ Level 2:
 nick = JazcashRenamed
 user = Jazcash
 host = public.cloak
-signalName = `PRIVMSG
+signalName = PRIVMSG
 signalArgs = ["#ectest", ":!hi Jim Fred"]
 ```
 	
@@ -60,11 +60,11 @@ Levels below this are specific to chat commands
 Level 4: 
 `:<nick>!~<user>@<host> <signalName> <channel> :!<cmd>`
 ```
-cmd = `["hi", "Jim", "Fred"]
+cmd = ["hi", "Jim", "Fred"]
 ```
 Level 5: 
 `:<nick>!~<user>@<host> <signalName> <channel> :!<cmdTrigger> <cmdArgs>`
 ```
 cmdTrigger = hi
-cmdArgs = `["Jim", "Fred"]
+cmdArgs = ["Jim", "Fred"]
 ```
