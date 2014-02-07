@@ -1,22 +1,17 @@
-Jazbot
+CmdBot
 ====
 
 ### About
-Jazbot is an IRC bot API that allows users to easily add their own commands with straight-forward access to various metadata surrounding IRC like channels, users, nicknames, message etc.
+CmdBot is an IRC bot API that allows users to easily add their own commands with straight-forward access to various metadata surrounding IRC like channels, users, nicknames, message etc.
 
 ### Dependancies
 * Python 2.7
 
 ### Usage
 ```python
-## myBot.py ##
-import cmdbot
-
-mybot = cmdbot.CmdBot("irc.w3.org", 6667, "Jazbot", ["#chan1"])
-
 ## commands.py ##
-def hi():
-    _say(channel, "Hello %s!" % (nick))
+def _hi():
+    ircSay(channel, "Hello %s!" % (nick))
 ```
 Then simply run your bot with: `$ python myBot.py`. That's all!
 
